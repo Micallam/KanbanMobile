@@ -40,10 +40,10 @@
         android:id="@+id/btn_login_start"
         android:layout_width="300dp"
         android:layout_height="65dp"
-        android:layout_below="@id/application_name"
+        android:layout_below="@id/author2_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:text="LOG IN"
+        android:layout_marginTop="25dp"
+        android:text="ZALOGUJ"
         android:textSize="17sp" />
 
     <Button
@@ -53,7 +53,7 @@
         android:layout_below="@id/btn_login_start"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="REGISTER"
+        android:text="ZAREJESTRUJ SIĘ"
         android:textSize="17sp" />
 
 </RelativeLayout>
