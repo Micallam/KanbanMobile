@@ -6,8 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST'){
     $password = $_POST['password'];
 	$type = $_POST['type'];
 
-    $password = password_hash($password, PASSWORD_DEFAULT);
-
     require_once 'connect.php';
 
     $sql = "INSERT INTO User (type, login, password) VALUES ('$type', '$login', '$password')";
@@ -26,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST'){
 
         echo json_encode($result);
         mysqli_close($conn);
+
     }
 }
 

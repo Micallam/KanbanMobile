@@ -18,8 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
 
         $row = mysqli_fetch_assoc($response);
+        $hash = $row['password'];
 
-        if (password_verify($password, $row['password']))
+        if ($password == $hash)
         {
 
             $index['id'] = $row['id'];
@@ -29,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             $result['success'] = "1";
             $result['message'] = "success";
-            echo json_encode($result);
 
+            echo json_encode($result);
             mysqli_close($conn);
 
         }
@@ -44,9 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             mysqli_close($conn);
 
         }
-
     }
-
 }
-
 ?>
