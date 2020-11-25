@@ -56,8 +56,6 @@ public class RegisterActivity extends AppCompatActivity {
                     login.setError("Wprowadź login!");
                     password.setError("Wprowadź hasło!");
                 }
-
-                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }

@@ -59,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                     login.setError("Wpisz login!");
                     password.setError("Wpisz hasło!");
                 }
-                progressBar.setVisibility(View.INVISIBLE);
            }
         });
     }

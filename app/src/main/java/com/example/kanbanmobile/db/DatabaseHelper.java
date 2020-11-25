@@ -2,6 +2,7 @@ package com.example.kanbanmobile.db;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.kanbanmobile.EditActivity;
 import com.example.kanbanmobile.LoginActivity;
 import com.example.kanbanmobile.MainActivity;
 
@@ -37,6 +39,8 @@ import javax.crypto.spec.SecretKeySpec;
 public class DatabaseHelper {
     final String URL_LOGIN = "http://gajda-adrian.ehost.pl/scripts/login.php";
     final String URL_REGISTER = "http://gajda-adrian.ehost.pl/scripts/register.php";
+    final String URL_EDIT = "http://gajda-adrian.ehost.pl/scripts/edit.php";
+    final String URL_DELETE = "http://gajda-adrian.ehost.pl/scripts/delete.php";
     static String secretKey = "mfryy46ABm";
     static String salt = "Hx4wWgDU40";
     private Context context;
@@ -63,7 +67,9 @@ public class DatabaseHelper {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     Toast.makeText(context, "Zalogowano pomyślnie!", Toast.LENGTH_SHORT).show();
                                     progressBar.setVisibility(View.INVISIBLE);
-                                    context.startActivity(new Intent(context, MainActivity.class)); //wywołać activity po zalogowaniu
+                                    Intent intent = new Intent(context, EditActivity.class); //wywołać activity po zalogowaniu
+                                    intent.putExtra("login", login);
+                                    context.startActivity(intent);
                                 }
 
                             } else {
@@ -74,14 +80,14 @@ public class DatabaseHelper {
                         } catch (JSONException e) {
                             e.printStackTrace();
                             progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(context, "Error " +e.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Błąd! " +e.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Error " +error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Błąd! " +error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 })
         {
@@ -189,4 +195,92 @@ public class DatabaseHelper {
         return null;
     }
 
+    public void Edit(final String login, final String oldPassword, final String newPassword) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_EDIT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+
+                            if (success.equals("1")) {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(context, "Zaktualizowano pomyślnie!", Toast.LENGTH_SHORT).show();
+                                context.startActivity(new Intent(context, LoginActivity.class));
+                            } else {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(context, "Nieprawidłowe hasło!", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, "Błąd aktualizacji! " + e.toString(), Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Błąd aktualizacji! " + error.toString(), Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("login", login);
+                params.put("old_password", encrypt(oldPassword));
+                params.put("new_password", encrypt(newPassword));
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+
+    public void Delete(final String login) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_DELETE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+
+                            if (success.equals("1")) {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(context, "Konto usunięte pomyślnie!", Toast.LENGTH_SHORT).show();
+                                context.startActivity(new Intent(context, LoginActivity.class));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, "Błąd usuwania konta! " + e.toString(), Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Błąd usuwania konta! " + error.toString(), Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("login", login);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
 }
