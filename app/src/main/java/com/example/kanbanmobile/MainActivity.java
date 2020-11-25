@@ -1,16 +1,17 @@
 package com.example.kanbanmobile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     Button btnLogin;
     Button btnRegister;
+    Button btnAdminPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnLogin = findViewById(R.id.btn_login_start);
         btnRegister = findViewById(R.id.btn_register_start);
+        btnAdminPanel = findViewById(R.id.btn_admin_panel_start);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this,
                         RegisterActivity.class);
+                startActivity(i);
+            }
+        });
+
+        btnAdminPanel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,
+                        AdminPanelActivity.class);
                 startActivity(i);
             }
         });

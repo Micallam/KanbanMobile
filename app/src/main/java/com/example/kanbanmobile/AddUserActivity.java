@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kanbanmobile.db.DatabaseHelper;
 
-public class RegisterActivity extends AppCompatActivity {
+public class AddUserActivity extends AppCompatActivity {
 
     EditText login, password;
     Button btnRegister;
@@ -33,8 +33,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.INVISIBLE);
 
-        databaseHelper = new DatabaseHelper(RegisterActivity.this, progressBar);
+        databaseHelper = new DatabaseHelper(AddUserActivity.this, progressBar);
 
+        btnRegister.setText("Dodaj");
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (!getLogin.isEmpty() && !getPassword.isEmpty()) {
                     String userType = checkType();
-                    databaseHelper.Register(getLogin, getPassword, userType, LoginActivity.class);
+                    databaseHelper.Register(getLogin, getPassword, userType, AdminPanelActivity.class);
                 } else if(getLogin.isEmpty()) {
                     login.setError("Wprowadź login!");
                 }
@@ -56,6 +57,8 @@ public class RegisterActivity extends AppCompatActivity {
                     login.setError("Wprowadź login!");
                     password.setError("Wprowadź hasło!");
                 }
+
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
