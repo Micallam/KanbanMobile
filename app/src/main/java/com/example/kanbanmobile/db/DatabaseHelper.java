@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -19,12 +20,15 @@ import com.android.volley.toolbox.Volley;
 import com.example.kanbanmobile.EditActivity;
 import com.example.kanbanmobile.LoginActivity;
 import com.example.kanbanmobile.MainActivity;
+import com.example.kanbanmobile.adapters.UsersAdapter;
+import com.example.kanbanmobile.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.spec.KeySpec;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +45,7 @@ public class DatabaseHelper {
     final String URL_REGISTER = "http://gajda-adrian.ehost.pl/scripts/register.php";
     final String URL_EDIT = "http://gajda-adrian.ehost.pl/scripts/edit.php";
     final String URL_DELETE = "http://gajda-adrian.ehost.pl/scripts/delete.php";
+    final String URL_GET_USERS = "http://gajda-adrian.ehost.pl/scripts/getUsers.php";
     static String secretKey = "mfryy46ABm";
     static String salt = "Hx4wWgDU40";
     private Context context;
@@ -104,7 +109,7 @@ public class DatabaseHelper {
         requestQueue.add(stringRequest);
     }
 
-    public void Register(final String login, final String password, final String userType){
+    public void Register(final String login, final String password, final String userType, final Class activityToRedirect){
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REGISTER,
                 new Response.Listener<String>() {
@@ -117,7 +122,7 @@ public class DatabaseHelper {
                             if (success.equals("1")) {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(context, "Zarejestrowano pomyślnie!", Toast.LENGTH_SHORT).show();
-                                context.startActivity(new Intent(context, LoginActivity.class));
+                                context.startActivity(new Intent(context, activityToRedirect));
                             }
 
                         } catch (JSONException e) {
@@ -148,6 +153,49 @@ public class DatabaseHelper {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
+    }
+
+    public void loadUsers(final ListView lvUsers) {
+        final ArrayList<User> arrayOfUsers = new ArrayList<>();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_GET_USERS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray array = new JSONArray(response);
+
+                    for(int i=0; i<array.length(); i++) {
+                        JSONObject usersJSON = array.getJSONObject(i);
+
+                        arrayOfUsers.add(new User(
+                                usersJSON.getString("login").trim(),
+                                "Ulica: " + usersJSON.getString("type").trim()
+                        ));
+                    }
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
+
+                UsersAdapter adapter = new UsersAdapter(context, arrayOfUsers);
+                lvUsers.setAdapter(adapter);
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {}
+                })
+        ;
+
+        Volley.newRequestQueue(context).add(stringRequest);
+    }
+
+    public static ArrayList<User> getUserList(){
+        ArrayList<User> arrayOfUsers = new ArrayList<>();
+        arrayOfUsers.add(new User("test", "user"));
+        arrayOfUsers.add(new User("m", "admin"));
+        arrayOfUsers.add(new User("login", "admin"));
+
+        return arrayOfUsers;
     }
 
     public static String encrypt(String strToEncrypt)
