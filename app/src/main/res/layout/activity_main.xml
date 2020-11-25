@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
     <TextView
         android:id="@+id/application_name"
@@ -15,34 +15,24 @@
         android:textColor="#000"/>
 
     <TextView
-        android:id="@+id/author1_name"
+        android:id="@+id/authors_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15dp"
         android:textAlignment="center"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/application_name"
-        android:text="Gajda Adrian"
-        android:textColor="#000"/>
-
-    <TextView
-        android:id="@+id/author2_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:textAlignment="center"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/author1_name"
-        android:text="Górski Michał"
+        android:layout_alignParentBottom="true"
+        android:text="Gajda &amp; Górski"
+        android:layout_marginBottom="10dp"
         android:textColor="#000"/>
 
     <Button
         android:id="@+id/btn_login_start"
         android:layout_width="300dp"
         android:layout_height="65dp"
-        android:layout_below="@id/author2_name"
+        android:layout_below="@id/application_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:text="ZALOGUJ"
         android:textSize="17sp" />
 
@@ -52,7 +42,7 @@
         android:layout_height="65dp"
         android:layout_below="@id/btn_login_start"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="ZAREJESTRUJ SIĘ"
         android:textSize="17sp" />
 
