@@ -123,6 +123,9 @@ public class DatabaseHelper {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(context, "Zarejestrowano pomyślnie!", Toast.LENGTH_SHORT).show();
                                 context.startActivity(new Intent(context, activityToRedirect));
+                            } else {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(context, "Nieprawidłowy login lub hasło!", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
