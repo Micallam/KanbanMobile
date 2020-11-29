@@ -1,11 +1,13 @@
 package com.example.kanbanmobile.models;
 
+import com.example.kanbanmobile.enums.UserType;
+
 public class User {
     String login;
     String password;
-    String userType;
+    UserType userType;
 
-    public User(String login, String userType){
+    public User(String login, UserType userType){
         this.login = login;
         this.userType = userType;
     }
@@ -26,11 +28,13 @@ public class User {
         this.password = password;
     }
 
-    public String getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(UserType userType) {
         this.userType = userType;
     }
+
+
 }

@@ -2,7 +2,6 @@ package com.example.kanbanmobile.db;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -19,8 +18,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kanbanmobile.EditActivity;
 import com.example.kanbanmobile.LoginActivity;
-import com.example.kanbanmobile.MainActivity;
 import com.example.kanbanmobile.adapters.UsersAdapter;
+import com.example.kanbanmobile.enums.UserType;
 import com.example.kanbanmobile.models.User;
 
 import org.json.JSONArray;
@@ -71,20 +70,25 @@ public class DatabaseHelper {
 
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     Toast.makeText(context, "Zalogowano pomyślnie!", Toast.LENGTH_SHORT).show();
-                                    progressBar.setVisibility(View.INVISIBLE);
+
+                                    if (progressBar != null)
+                                        progressBar.setVisibility(View.INVISIBLE);
                                     Intent intent = new Intent(context, EditActivity.class); //wywołać activity po zalogowaniu
                                     intent.putExtra("login", login);
                                     context.startActivity(intent);
                                 }
 
                             } else {
-                                progressBar.setVisibility(View.INVISIBLE);
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(context, "Nieprawidłowy login lub hasło!", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            progressBar.setVisibility(View.INVISIBLE);
+
+                            if (progressBar != null)
+                                progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(context, "Błąd! " +e.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -120,18 +124,24 @@ public class DatabaseHelper {
                             String success = jsonObject.getString("success");
 
                             if (success.equals("1")) {
-                                progressBar.setVisibility(View.INVISIBLE);
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
                                 Toast.makeText(context, "Zarejestrowano pomyślnie!", Toast.LENGTH_SHORT).show();
                                 context.startActivity(new Intent(context, activityToRedirect));
                             } else {
-                                progressBar.setVisibility(View.INVISIBLE);
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
                                 Toast.makeText(context, "Podany login jest zajęty!", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(context, "Błąd rejestracji! " + e.toString(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
+
+                            if (progressBar != null)
+                                progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
                 },
@@ -139,7 +149,9 @@ public class DatabaseHelper {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(context, "Błąd rejestracji! " + error.toString(), Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.INVISIBLE);
+
+                        if (progressBar != null)
+                            progressBar.setVisibility(View.INVISIBLE);
                     }
                 })
 
@@ -172,7 +184,7 @@ public class DatabaseHelper {
 
                         arrayOfUsers.add(new User(
                                 usersJSON.getString("login").trim(),
-                                "Ulica: " + usersJSON.getString("type").trim()
+                                UserType.fromInteger(Integer.parseInt(usersJSON.getString("type").trim()))
                         ));
                     }
                 } catch (JSONException jsonException) {
@@ -190,15 +202,6 @@ public class DatabaseHelper {
         ;
 
         Volley.newRequestQueue(context).add(stringRequest);
-    }
-
-    public static ArrayList<User> getUserList(){
-        ArrayList<User> arrayOfUsers = new ArrayList<>();
-        arrayOfUsers.add(new User("test", "user"));
-        arrayOfUsers.add(new User("m", "admin"));
-        arrayOfUsers.add(new User("login", "admin"));
-
-        return arrayOfUsers;
     }
 
     public static String encrypt(String strToEncrypt)
@@ -257,18 +260,24 @@ public class DatabaseHelper {
                             String success = jsonObject.getString("success");
 
                             if (success.equals("1")) {
-                                progressBar.setVisibility(View.INVISIBLE);
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
                                 Toast.makeText(context, "Zaktualizowano pomyślnie!", Toast.LENGTH_SHORT).show();
                                 context.startActivity(new Intent(context, LoginActivity.class));
                             } else {
-                                progressBar.setVisibility(View.INVISIBLE);
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
                                 Toast.makeText(context, "Nieprawidłowe hasło!", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(context, "Błąd aktualizacji! " + e.toString(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
+
+                            if (progressBar != null)
+                                progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
                 },
@@ -276,7 +285,9 @@ public class DatabaseHelper {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(context, "Błąd aktualizacji! " + error.toString(), Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.INVISIBLE);
+
+                        if (progressBar != null)
+                            progressBar.setVisibility(View.INVISIBLE);
                     }
                 }) {
             @Override
@@ -293,7 +304,7 @@ public class DatabaseHelper {
         requestQueue.add(stringRequest);
     }
 
-    public void Delete(final String login) {
+    public void Delete(final String login, final Class activityToRedirect) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_DELETE,
                 new Response.Listener<String>() {
@@ -304,15 +315,19 @@ public class DatabaseHelper {
                             String success = jsonObject.getString("success");
 
                             if (success.equals("1")) {
-                                progressBar.setVisibility(View.INVISIBLE);
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
                                 Toast.makeText(context, "Konto usunięte pomyślnie!", Toast.LENGTH_SHORT).show();
-                                context.startActivity(new Intent(context, LoginActivity.class));
+                                context.startActivity(new Intent(context, activityToRedirect));
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(context, "Błąd usuwania konta! " + e.toString(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
+
+                            if (progressBar != null)
+                                progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
                 },
@@ -320,7 +335,9 @@ public class DatabaseHelper {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(context, "Błąd usuwania konta! " + error.toString(), Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.INVISIBLE);
+
+                        if (progressBar != null)
+                            progressBar.setVisibility(View.INVISIBLE);
                     }
                 }) {
             @Override
