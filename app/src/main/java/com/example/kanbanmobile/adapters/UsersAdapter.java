@@ -11,8 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.kanbanmobile.AdminPanelActivity;
 import com.example.kanbanmobile.R;
+import com.example.kanbanmobile.db.DatabaseHelper;
 import com.example.kanbanmobile.models.User;
+import com.example.kanbanmobile.utils.AndroidUtil;
 
 import java.util.ArrayList;
 
@@ -34,13 +37,19 @@ public class UsersAdapter extends ArrayAdapter<User> {
         TextView tvUserType = convertView.findViewById(R.id.userType);
 
         tvLogin.setText(user.getLogin());
-        tvUserType.setText(user.getUserType());
+        tvUserType.setText(user.getUserType().toString());
 
         Button btnDeleteUser = convertView.findViewById(R.id.deleteUser);
         btnDeleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UsersAdapter.super.remove(user);
+                if (AndroidUtil.ConfirmDeletionDialog(getContext()))
+                {
+                    UsersAdapter.super.remove(user);
+
+                    new DatabaseHelper(getContext(), null)
+                        .Delete(user.getLogin(), AdminPanelActivity.class);
+                }
             }
         });
 
