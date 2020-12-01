@@ -10,6 +10,7 @@ import android.widget.RadioButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kanbanmobile.db.DatabaseHelper;
+import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 
 public class AddUserActivity extends AppCompatActivity {
 
@@ -18,11 +19,14 @@ public class AddUserActivity extends AppCompatActivity {
     ProgressBar progressBar;
     RadioButton typeAdmin, typeUser;
     DatabaseHelper databaseHelper;
+    private SharedPreferenceConfig sharedPreferenceConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        sharedPreferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        sharedPreferenceConfig.checkIfLogged(this);
 
         login = findViewById(R.id.login);
         password = findViewById(R.id.password);
