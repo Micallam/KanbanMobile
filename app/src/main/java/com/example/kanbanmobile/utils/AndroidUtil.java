@@ -4,6 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.TimeZone;
+
 public class AndroidUtil {
     public static boolean ConfirmDeletionDialog(Context context)
     {
@@ -30,5 +34,10 @@ public class AndroidUtil {
         myQuittingDialogBox.show();
 
         return response[0];
+    }
+
+    public static LocalDateTime longToDateTime(long timestamp) {
+        return  LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),
+                TimeZone.getDefault().toZoneId());
     }
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5sp" />
+
+    <EditText
+        android:id="@+id/eventName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/calendarView"
+        android:layout_centerHorizontal="true"
+        android:autofillHints=""
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Nazwa zdarzenia" />
+
+    <EditText
+        android:id="@+id/eventDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:layout_below="@id/eventName"
+        android:lines="8"
+        android:maxLines="10"
+        android:minLines="6"
+        android:layout_centerHorizontal="true"
+        android:ems="12"
+        android:scrollbars="vertical"
+        android:hint="Opis" />
+
+    <Button
+        android:id="@+id/btnSaveEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/eventDescription"
+        android:layout_centerHorizontal="true"
+        android:text="Zapisz" />
+
+
+    <ListView
+        android:id="@+id/event_listView"
+        android:layout_below="@id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="200sp"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/btnShowEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnSaveEvent"
+        android:layout_marginTop="5sp"
+        android:layout_centerHorizontal="true"
+        android:text="Wydarzenia" />
+
+</RelativeLayout>

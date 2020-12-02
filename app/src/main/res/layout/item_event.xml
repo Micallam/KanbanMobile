@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/event_item_name"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_height="wrap_content"
+        android:minHeight="50sp"
+        android:textSize="17sp"
+        android:paddingHorizontal="10sp"
+        android:paddingVertical="5sp"
+        android:gravity="center_vertical"
+        android:text="Nazwa" />
+
+    <TextView
+        android:id="@+id/event_item_description"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_height="wrap_content"
+        android:minHeight="50sp"
+        android:textSize="17sp"
+        android:paddingHorizontal="10sp"
+        android:paddingVertical="5sp"
+        android:gravity="center_vertical"
+        android:scrollbars="vertical"
+        android:text="Opis" />
+
+    <TextView
+        android:id="@+id/event_item_dateTime"
+        android:layout_width="0dp"
+        android:layout_weight="0.3"
+        android:layout_height="wrap_content"
+        android:minHeight="50sp"
+        android:textSize="17sp"
+        android:paddingHorizontal="10sp"
+        android:paddingVertical="5sp"
+        android:gravity="center_vertical"
+        android:text="Czas" />
+
+    <Button
+        android:id="@+id/btnEditEvent"
+        android:layout_width="0dp"
+        android:layout_weight="0.15"
+        android:layout_height="wrap_content"
+        android:minHeight="50sp"
+        android:layout_marginHorizontal="1sp"
+        android:background="@android:color/holo_blue_light"
+        android:text="Edytuj"
+        android:textSize="13sp" />
+
+    <Button
+        android:id="@+id/btnDeleteEvent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="50sp"
+        android:layout_weight="0.15"
+        android:background="@android:color/holo_red_dark"
+        android:layout_marginHorizontal="1sp"
+        android:text="USUŃ"
+        android:textColor="@android:color/white"
+        android:textSize="13sp" />
+
+
+</LinearLayout>

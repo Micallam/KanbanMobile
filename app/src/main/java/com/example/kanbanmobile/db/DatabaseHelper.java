@@ -21,9 +21,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.kanbanmobile.AddTaskActivity;
 import com.example.kanbanmobile.EditActivity;
 import com.example.kanbanmobile.LoginActivity;
+import com.example.kanbanmobile.adapters.EventsAdapter;
 import com.example.kanbanmobile.R;
 import com.example.kanbanmobile.adapters.UsersAdapter;
 import com.example.kanbanmobile.enums.UserType;
+import com.example.kanbanmobile.models.Event;
 import com.example.kanbanmobile.models.User;
 import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 
@@ -51,6 +53,9 @@ public class DatabaseHelper {
     final String URL_DELETE = "http://gajda-adrian.ehost.pl/scripts/delete.php";
     final String URL_GET_USERS = "http://gajda-adrian.ehost.pl/scripts/getUsers.php";
     final String URL_ADD_TASK = "http://gajda-adrian.ehost.pl/scripts/addTask.php";
+    final String URL_ADD_EVENT = "http://gajda-adrian.ehost.pl/scripts/addEvent.php";
+    final String URL_GET_EVENTS = "http://gajda-adrian.ehost.pl/scripts/getEvents.php";
+    final String URL_DELETE_EVENT = "http://gajda-adrian.ehost.pl/scripts/deleteEvent.php";
     static String secretKey = "mfryy46ABm";
     static String salt = "Hx4wWgDU40";
     private Context context;
@@ -328,7 +333,9 @@ public class DatabaseHelper {
                                     progressBar.setVisibility(View.INVISIBLE);
 
                                 Toast.makeText(context, "Konto usunięte pomyślnie!", Toast.LENGTH_SHORT).show();
-                                context.startActivity(new Intent(context, activityToRedirect));
+
+                                if (activityToRedirect != null)
+                                    context.startActivity(new Intent(context, activityToRedirect));
                             }
 
                         } catch (JSONException e) {
@@ -465,6 +472,147 @@ public class DatabaseHelper {
                 return params;
             }
         };
+
+        Volley.newRequestQueue(context).add(stringRequest);
+    }
+
+    public void addEvent(final Event event, final Class activityToRedirect){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ADD_EVENT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try{
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+
+                            if (success.equals("1")) {
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
+                                Toast.makeText(context, "Wydarzenie dodano pomyślnie!", Toast.LENGTH_SHORT).show();
+                                context.startActivity(new Intent(context, activityToRedirect));
+                            } else {
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
+                                Toast.makeText(context, "Błąd dodawania!", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, "Błąd dodawania! " + e.toString(), Toast.LENGTH_SHORT).show();
+
+                            if (progressBar != null)
+                                progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Błąd dodawania! " + error.toString(), Toast.LENGTH_SHORT).show();
+
+                        if (progressBar != null)
+                            progressBar.setVisibility(View.INVISIBLE);
+                    }
+                })
+
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("name", event.getName());
+                params.put("description", event.getDescription());
+                params.put("eventDateTime", event.getEventDateTimeString());
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+
+    public void deleteEvent(final Event event) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_DELETE_EVENT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+
+                            if (success.equals("1")) {
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
+                                Toast.makeText(context, "Wydarzenie usunięte pomyślnie!", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, "Błąd usuwania wydarzenia! " + e.toString(), Toast.LENGTH_SHORT).show();
+
+                            if (progressBar != null)
+                                progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Błąd usuwania wydarzenia! " + error.toString(), Toast.LENGTH_SHORT).show();
+
+                        if (progressBar != null)
+                            progressBar.setVisibility(View.INVISIBLE);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("name", event.getName());
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+
+
+    public void loadEvents(final ListView lvEvents) {
+        final ArrayList<Event> arrayOfEvents = new ArrayList<>();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_GET_EVENTS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray array = new JSONArray(response);
+
+                    for(int i=0; i<array.length(); i++) {
+                        JSONObject eventsJSON = array.getJSONObject(i);
+
+                        arrayOfEvents.add(new Event(
+                                eventsJSON.getString("name").trim(),
+                                eventsJSON.getString("description").trim(),
+                                eventsJSON.getString("eventDateTime")
+                        ));
+                    }
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
+
+                EventsAdapter adapter = new EventsAdapter(context, arrayOfEvents);
+                lvEvents.setAdapter(adapter);
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Błąd! " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                ;
 
         Volley.newRequestQueue(context).add(stringRequest);
     }
