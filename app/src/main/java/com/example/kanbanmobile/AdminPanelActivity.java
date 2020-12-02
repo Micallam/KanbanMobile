@@ -1,5 +1,6 @@
 package com.example.kanbanmobile;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,17 +11,21 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kanbanmobile.db.DatabaseHelper;
+import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 
 public class AdminPanelActivity extends AppCompatActivity {
 
     Button btnAddUser;
     Button btnShowList;
     ListView lvUsers;
+    private SharedPreferenceConfig sharedPreferenceConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_panel);
+        sharedPreferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        sharedPreferenceConfig.checkIfLogged(this);
 
         lvUsers = findViewById(R.id.user_listView);
 

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kanbanmobile.db.DatabaseHelper;
+import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -21,12 +22,14 @@ public class EditActivity extends AppCompatActivity {
     ProgressBar progressBar;
     DatabaseHelper databaseHelper;
     String login;
+    private SharedPreferenceConfig sharedPreferenceConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_edit);
+        sharedPreferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        sharedPreferenceConfig.checkIfLogged(this);
 
         oldPassword = findViewById(R.id.old_password);
         newPassword = findViewById(R.id.new_password);
@@ -36,8 +39,7 @@ public class EditActivity extends AppCompatActivity {
 
         initButtonsClick();
 
-        Intent intent = getIntent();
-        login = intent.getStringExtra("login");
+        login = sharedPreferenceConfig.getLoggedUser();
 
         progressBar.setVisibility(View.INVISIBLE);
 

@@ -3,8 +3,10 @@ package com.example.kanbanmobile.db;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,11 +18,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.kanbanmobile.AddTaskActivity;
 import com.example.kanbanmobile.EditActivity;
 import com.example.kanbanmobile.LoginActivity;
+import com.example.kanbanmobile.R;
 import com.example.kanbanmobile.adapters.UsersAdapter;
 import com.example.kanbanmobile.enums.UserType;
 import com.example.kanbanmobile.models.User;
+import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +50,7 @@ public class DatabaseHelper {
     final String URL_EDIT = "http://gajda-adrian.ehost.pl/scripts/edit.php";
     final String URL_DELETE = "http://gajda-adrian.ehost.pl/scripts/delete.php";
     final String URL_GET_USERS = "http://gajda-adrian.ehost.pl/scripts/getUsers.php";
+    final String URL_ADD_TASK = "http://gajda-adrian.ehost.pl/scripts/addTask.php";
     static String secretKey = "mfryy46ABm";
     static String salt = "Hx4wWgDU40";
     private Context context;
@@ -73,8 +79,11 @@ public class DatabaseHelper {
 
                                     if (progressBar != null)
                                         progressBar.setVisibility(View.INVISIBLE);
-                                    Intent intent = new Intent(context, EditActivity.class); //wywołać activity po zalogowaniu
-                                    intent.putExtra("login", login);
+                                    SharedPreferenceConfig sharedPreferenceConfig = new SharedPreferenceConfig(context.getApplicationContext());
+                                    sharedPreferenceConfig.loginStatus(true);
+                                    sharedPreferenceConfig.loggedUser(login);
+
+                                    Intent intent = new Intent(context, AddTaskActivity.class); //wywołać activity po zalogowaniu
                                     context.startActivity(intent);
                                 }
 
@@ -228,7 +237,7 @@ public class DatabaseHelper {
         return null;
     }
 
-    public static String decrypt(String strToDecrypt) {
+    /*public static String decrypt(String strToDecrypt) {
         try
         {
             byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -247,7 +256,7 @@ public class DatabaseHelper {
             System.out.println("Error while decrypting: " + e.toString());
         }
         return null;
-    }
+    }*/
 
     public void Edit(final String login, final String oldPassword, final String newPassword) {
 
@@ -350,5 +359,113 @@ public class DatabaseHelper {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
+    }
+
+    public void addTask(final String title, final String description, final String assignedUser, final Class activityToRedirect){
+        SharedPreferenceConfig sharedPreferenceConfig = new SharedPreferenceConfig(context.getApplicationContext());
+        final String createdBy = sharedPreferenceConfig.getLoggedUser();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ADD_TASK,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try{
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+
+                            if (success.equals("1")) {
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
+                                Toast.makeText(context, "Zadanie dodano pomyślnie!", Toast.LENGTH_SHORT).show();
+                                context.startActivity(new Intent(context, activityToRedirect));
+                            } else {
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
+                                Toast.makeText(context, "Błąd dodawania!", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, "Błąd dodawania! " + e.toString(), Toast.LENGTH_SHORT).show();
+
+                            if (progressBar != null)
+                                progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Błąd dodawania! " + error.toString(), Toast.LENGTH_SHORT).show();
+
+                        if (progressBar != null)
+                            progressBar.setVisibility(View.INVISIBLE);
+                    }
+                })
+
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("title", title);
+                params.put("description", description);
+                params.put("createdBy", createdBy);
+                params.put("assignedUser", assignedUser);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+
+    public void getUsersToSpinner(final ArrayList<String> users, final Spinner spinnerAssignedUser) {
+        final ArrayList<User> userArrayList = new ArrayList<User>();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_GET_USERS,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray array = new JSONArray(response);
+
+                            for(int i=0; i<array.length(); i++) {
+                                User userModel = new User();
+                                JSONObject object = array.getJSONObject(i);
+
+                                userModel.setLogin(object.getString("login"));
+
+                                userArrayList.add(userModel);
+                            }
+
+                            for(int i=0; i<userArrayList.size(); i++) {
+                                users.add(userArrayList.get(i).getLogin());
+                            }
+
+                            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.item_user_spinner, users);
+                            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+                            spinnerAssignedUser.setAdapter(spinnerArrayAdapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {}
+                })
+
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(context).add(stringRequest);
     }
 }

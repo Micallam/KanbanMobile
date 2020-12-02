@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">KanbanMobile</string>
+    <string name="login_shared_preference">com.example.kanbanmobile_login_shared_preference</string>
+    <string name="login_status_shared_preference">com.example.kanbanmobile_login_status_shared_preference</string>
 </resources>
