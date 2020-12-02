@@ -18,6 +18,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".AddUserActivity" />
         <activity android:name=".AdminPanelActivity" />
+        <activity android:name=".CalendarActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

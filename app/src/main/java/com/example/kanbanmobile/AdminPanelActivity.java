@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,7 +29,6 @@ public class AdminPanelActivity extends AppCompatActivity {
         btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminPanelActivity.this, "abc", Toast.LENGTH_LONG);
                 Intent i = new Intent(AdminPanelActivity.this,
                         AddUserActivity.class);
                 startActivity(i);

@@ -12,51 +12,54 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.kanbanmobile.AdminPanelActivity;
+import com.example.kanbanmobile.CalendarActivity;
 import com.example.kanbanmobile.R;
 import com.example.kanbanmobile.db.DatabaseHelper;
-import com.example.kanbanmobile.models.User;
+import com.example.kanbanmobile.models.Event;
 import com.example.kanbanmobile.utils.ConfirmDeletionDialog;
 
 import java.util.ArrayList;
 
-public class UsersAdapter extends ArrayAdapter<User> {
-    public UsersAdapter(@NonNull Context context, ArrayList<User> users) {
-        super(context, 0, users);
+public class EventsAdapter extends ArrayAdapter<Event> {
+    public EventsAdapter(@NonNull Context context, ArrayList<Event> events) {
+        super(context, 0, events);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final User user = getItem(position);
+        final Event event = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_user, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_event, parent, false);
         }
 
-        TextView tvLogin = convertView.findViewById(R.id.login);
-        TextView tvUserType = convertView.findViewById(R.id.userType);
+        TextView tvName = convertView.findViewById(R.id.event_item_name);
+        TextView tvDescription = convertView.findViewById(R.id.event_item_description);
+        TextView tvDateTime = convertView.findViewById(R.id.event_item_dateTime);
 
-        tvLogin.setText(user.getLogin());
-        tvUserType.setText(user.getUserType().toString());
+        tvName.setText(event.getName());
+        tvDescription.setText(event.getDescription());
+        tvDateTime.setText(event.getEventDateTimeString());
 
-        Button btnDeleteUser = convertView.findViewById(R.id.deleteUser);
-        btnDeleteUser.setOnClickListener(new View.OnClickListener() {
+        Button btnDeleteEvent = convertView.findViewById(R.id.btnDeleteEvent);
+        btnDeleteEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ConfirmDeletionDialog dialog = new ConfirmDeletionDialog(getContext(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        UsersAdapter.super.remove(user);
+
+                        EventsAdapter.super.remove(event);
 
                         new DatabaseHelper(getContext(), null)
-                                .Delete(user.getLogin(), null);
+                                .deleteEvent(event);
                     }
                 });
 
                 dialog.show(
-                        ((AdminPanelActivity)getContext()).getSupportFragmentManager(),
-                        "ConfirmDeleteUserDialog"
+                        ((CalendarActivity)getContext()).getSupportFragmentManager(),
+                        "ConfirmDeleteEventDialog"
                 );
             }
         });
