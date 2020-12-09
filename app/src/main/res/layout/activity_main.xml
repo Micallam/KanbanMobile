@@ -3,6 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <Button
+        android:id="@+id/btn_board"
+        android:layout_width="300dp"
+        android:layout_height="65dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Tablica"
+        android:textSize="17sp" />
+
     <TextView
         android:id="@+id/application_name"
         android:layout_width="wrap_content"

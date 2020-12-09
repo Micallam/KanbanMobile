@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnRegister;
     Button btnAdminPanel;
     Button btnCalendar;
+    Button btnBoard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btn_register_start);
         btnAdminPanel = findViewById(R.id.btn_admin_panel_start);
         btnCalendar = findViewById(R.id.btn_calendar_start);
+        btnBoard = findViewById(R.id.btn_board);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this,
                         CalendarActivity.class);
+                startActivity(i);
+            }
+        });
+
+        btnBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,
+                        BoardActivity.class);
                 startActivity(i);
             }
         });
