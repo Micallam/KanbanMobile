@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.example.kanbanmobile.db.DatabaseHelper;
+import com.example.kanbanmobile.enums.TaskStatus;
 import com.example.kanbanmobile.models.User;
 import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 
@@ -55,7 +56,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 String getAssignedUser = spinnerAssignedUser.getSelectedItem().toString();
 
                 if (!getTitle.isEmpty()) {
-                    databaseHelper.addTask(getTitle, getDescription, getAssignedUser, EditActivity.class);
+                    databaseHelper.addTask(getTitle, getDescription, getAssignedUser, TaskStatus.NEW, EditActivity.class);
                 } else {
                     title.setError("Wprowadź tytuł!");
                 }

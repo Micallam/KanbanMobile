@@ -5,15 +5,15 @@ import com.time.cat.dragboardview.model.DragItem;
 
 import java.util.List;
 
-public class Entry implements DragColumn {
+public class StatusDragColumn implements DragColumn {
     private final String id;
     private final String name;
-    private final List<DragItem> itemList;
+    private final List<DragItem> taskList;
 
-    public Entry(String id, String name, List<DragItem> items) {
+    public StatusDragColumn(String id, String name, List<DragItem> taskList) {
         this.id = id;
         this.name = name;
-        this.itemList = items;
+        this.taskList = taskList;
     }
 
     public String getId() {
@@ -24,8 +24,8 @@ public class Entry implements DragColumn {
         return name;
     }
 
-    public List<DragItem> getItemList() {
-        return itemList;
+    public List<DragItem> getTaskList() {
+        return taskList;
     }
 
     @Override

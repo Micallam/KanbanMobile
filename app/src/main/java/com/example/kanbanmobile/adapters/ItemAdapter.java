@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kanbanmobile.R;
-import com.example.kanbanmobile.data.Item;
+import com.example.kanbanmobile.models.Task;
 import com.time.cat.dragboardview.adapter.VerticalAdapter;
 import com.time.cat.dragboardview.helper.DragHelper;
 import com.time.cat.dragboardview.model.DragItem;
@@ -36,7 +36,7 @@ public class ItemAdapter extends VerticalAdapter<ItemAdapter.ViewHolder> {
                 return true;
             }
         });
-        holder.item_title.setText(((Item) item).getItemName());
+        holder.item_title.setText(((Task) item).getTitle());
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

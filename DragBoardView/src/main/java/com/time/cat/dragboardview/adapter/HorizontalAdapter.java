@@ -36,11 +36,11 @@ public abstract class HorizontalAdapter<VH extends HorizontalAdapter.ViewHolder>
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (needFooter() && viewType == TYPE_FOOTER) {
-            View convertView = LayoutInflater.from(mContext)
-                    .inflate(getFooterLayoutRes(), parent, false);
-            return onCreateViewHolder(convertView, TYPE_FOOTER);
-        }
+//        if (needFooter() && viewType == TYPE_FOOTER) {
+//            View convertView = LayoutInflater.from(mContext)
+//                    .inflate(getFooterLayoutRes(), parent, false);
+//            return onCreateViewHolder(convertView, TYPE_FOOTER);
+//        }
         View convertView = LayoutInflater.from(mContext)
                 .inflate(getContentLayoutRes(), parent, false);
         return onCreateViewHolder(convertView, TYPE_CONTENT);

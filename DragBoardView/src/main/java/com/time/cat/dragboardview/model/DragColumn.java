@@ -5,7 +5,7 @@ import androidx.annotation.IntRange;
 import java.util.List;
 
 public interface DragColumn {
-    List<? extends DragItem> getItemList();
+    List<? extends DragItem> getTaskList();
 
     @IntRange(from = 0)
     int getColumnIndex();

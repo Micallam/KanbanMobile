@@ -2,12 +2,12 @@ package com.example.kanbanmobile.data;
 
 import com.time.cat.dragboardview.model.DragItem;
 
-public class Item implements DragItem {
+public class TaskDragItem implements DragItem {
     private final String itemId;
     private final String itemName;
     private final String info;
 
-    public Item(String itemId, String itemName, String info) {
+    public TaskDragItem(String itemId, String itemName, String info) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.info = info;

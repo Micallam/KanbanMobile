@@ -12,6 +12,10 @@ public class User {
         this.userType = userType;
     }
 
+    public User (String login) {
+        this.login = login;
+    }
+
     public User() {
 
     }

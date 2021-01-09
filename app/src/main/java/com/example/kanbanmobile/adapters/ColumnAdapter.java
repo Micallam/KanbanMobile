@@ -16,8 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.kanbanmobile.R;
-import com.example.kanbanmobile.data.Entry;
-import com.example.kanbanmobile.data.Item;
+import com.example.kanbanmobile.data.StatusDragColumn;
+import com.example.kanbanmobile.data.TaskDragItem;
+import com.example.kanbanmobile.enums.TaskStatus;
 import com.time.cat.dragboardview.adapter.HorizontalAdapter;
 import com.time.cat.dragboardview.model.DragColumn;
 import com.time.cat.dragboardview.model.DragItem;
@@ -61,11 +62,16 @@ public class ColumnAdapter extends HorizontalAdapter<ColumnAdapter.ViewHolder> {
             }
         });
 
-        final Entry entry = (Entry) dragColumn;
-        holder.tv_title.setText(entry.getId());
-        final List<DragItem> itemList = entry.getItemList();
+        final StatusDragColumn statusDragColumn = (StatusDragColumn) dragColumn;
+        holder.tv_title.setText(statusDragColumn.getName());
+
+        if (!statusDragColumn.getName().equals(TaskStatus.NEW.toString()))
+            holder.add_task.setVisibility(View.INVISIBLE);
+
+        final List<DragItem> itemList = statusDragColumn.getTaskList();
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         holder.rv_item.setLayoutManager(layoutManager);
+
         final ItemAdapter itemAdapter = new ItemAdapter(mContext, dragHelper);
         itemAdapter.setData(itemList);
         holder.rv_item.setAdapter(itemAdapter);
@@ -81,7 +87,7 @@ public class ColumnAdapter extends HorizontalAdapter<ColumnAdapter.ViewHolder> {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 // add new Item instantly
-                                itemList.add(new Item(
+                                itemList.add(new TaskDragItem(
                                         "entry " + " item id ",
                                         "item name : new Item",
                                         "info : new Item"));
@@ -104,32 +110,32 @@ public class ColumnAdapter extends HorizontalAdapter<ColumnAdapter.ViewHolder> {
 
     @Override
     public void onBindFooterViewHolder(final ViewHolder holder, int position) {
-        holder.add_subPlan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.add_subPlan.setVisibility(View.GONE);
-                holder.edit_sub_plan.setVisibility(View.VISIBLE);
-            }
-        });
-        holder.btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.add_subPlan.setVisibility(View.VISIBLE);
-                holder.edit_sub_plan.setVisibility(View.GONE);
-            }
-        });
-        holder.btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = holder.editText.getText().toString();
-                if (!TextUtils.isEmpty(name)) {
-                    appendNewColumn(new Entry(
-                            "entry id " + name,
-                            "name : new entry",
-                            new ArrayList<DragItem>()));
-                }
-            }
-        });
+//        holder.add_subPlan.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                holder.add_subPlan.setVisibility(View.GONE);
+//                holder.edit_sub_plan.setVisibility(View.VISIBLE);
+//            }
+//        });
+//        holder.btn_cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                holder.add_subPlan.setVisibility(View.VISIBLE);
+//                holder.edit_sub_plan.setVisibility(View.GONE);
+//            }
+//        });
+//        holder.btn_ok.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String name = holder.editText.getText().toString();
+//                if (!TextUtils.isEmpty(name)) {
+//                    appendNewColumn(new StatusDragColumn(
+//                            "entry id " + name,
+//                            "name : new entry",
+//                            new ArrayList<DragItem>()));
+//                }
+//            }
+//        });
     }
 
     public class ViewHolder extends HorizontalAdapter.ViewHolder {
@@ -140,11 +146,11 @@ public class ColumnAdapter extends HorizontalAdapter<ColumnAdapter.ViewHolder> {
         RecyclerView rv_item;
         RelativeLayout add_task;
 
-        RelativeLayout add_subPlan;
-        RelativeLayout edit_sub_plan;
-        Button btn_cancel;
-        Button btn_ok;
-        EditText editText;
+//        RelativeLayout add_subPlan;
+//        RelativeLayout edit_sub_plan;
+//        Button btn_cancel;
+//        Button btn_ok;
+//        EditText editText;
 
         public ViewHolder(View convertView, int itemType) {
             super(convertView, itemType);
@@ -166,11 +172,11 @@ public class ColumnAdapter extends HorizontalAdapter<ColumnAdapter.ViewHolder> {
 
         @Override
         public void findViewForFooter(View convertView) {
-            add_subPlan = convertView.findViewById(R.id.add_sub_plan);
-            edit_sub_plan = convertView.findViewById(R.id.edit_sub_plan);
-            btn_cancel = convertView.findViewById(R.id.add_cancel);
-            btn_ok = convertView.findViewById(R.id.add_ok);
-            editText = convertView.findViewById(R.id.add_et);
+//            add_subPlan = convertView.findViewById(R.id.add_sub_plan);
+//            edit_sub_plan = convertView.findViewById(R.id.edit_sub_plan);
+//            btn_cancel = convertView.findViewById(R.id.add_cancel);
+//            btn_ok = convertView.findViewById(R.id.add_ok);
+//            editText = convertView.findViewById(R.id.add_et);
         }
     }
 }

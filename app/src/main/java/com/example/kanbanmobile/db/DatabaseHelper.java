@@ -2,6 +2,7 @@ package com.example.kanbanmobile.db;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.UnicodeSetIterator;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -21,13 +22,19 @@ import com.android.volley.toolbox.Volley;
 import com.example.kanbanmobile.AddTaskActivity;
 import com.example.kanbanmobile.EditActivity;
 import com.example.kanbanmobile.LoginActivity;
+import com.example.kanbanmobile.adapters.ColumnAdapter;
 import com.example.kanbanmobile.adapters.EventsAdapter;
 import com.example.kanbanmobile.R;
 import com.example.kanbanmobile.adapters.UsersAdapter;
+import com.example.kanbanmobile.data.StatusDragColumn;
+import com.example.kanbanmobile.enums.TaskStatus;
 import com.example.kanbanmobile.enums.UserType;
 import com.example.kanbanmobile.models.Event;
+import com.example.kanbanmobile.models.Task;
 import com.example.kanbanmobile.models.User;
 import com.example.kanbanmobile.shared.SharedPreferenceConfig;
+import com.time.cat.dragboardview.model.DragColumn;
+import com.time.cat.dragboardview.model.DragItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +44,7 @@ import java.security.spec.KeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.crypto.Cipher;
@@ -46,12 +54,17 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import static com.example.kanbanmobile.enums.TaskStatus.CLOSED;
+import static com.example.kanbanmobile.enums.TaskStatus.IN_PROGRESS;
+import static com.example.kanbanmobile.enums.TaskStatus.NEW;
+
 public class DatabaseHelper {
     final String URL_LOGIN = "http://gajda-adrian.ehost.pl/scripts/login.php";
     final String URL_REGISTER = "http://gajda-adrian.ehost.pl/scripts/register.php";
     final String URL_EDIT = "http://gajda-adrian.ehost.pl/scripts/edit.php";
     final String URL_DELETE = "http://gajda-adrian.ehost.pl/scripts/delete.php";
     final String URL_GET_USERS = "http://gajda-adrian.ehost.pl/scripts/getUsers.php";
+    final String URL_GET_TASKS = "http://gajda-adrian.ehost.pl/scripts/getTasks.php";
     final String URL_ADD_TASK = "http://gajda-adrian.ehost.pl/scripts/addTask.php";
     final String URL_ADD_EVENT = "http://gajda-adrian.ehost.pl/scripts/addEvent.php";
     final String URL_GET_EVENTS = "http://gajda-adrian.ehost.pl/scripts/getEvents.php";
@@ -182,6 +195,64 @@ public class DatabaseHelper {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
+    }
+
+    public void loadTask(final ColumnAdapter columnAdapter, final List<DragColumn> columnList) {
+        final ArrayList<DragItem> newTasks = new ArrayList<>();
+        final ArrayList<DragItem> inProgressTasks = new ArrayList<>();
+        final ArrayList<DragItem> closedTasks = new ArrayList<>();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_GET_TASKS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray array = new JSONArray(response);
+
+                    for(int i=0; i<array.length(); i++) {
+                        JSONObject usersJSON = array.getJSONObject(i);
+
+                        Task task = new Task(
+                                usersJSON.getString("title").trim(),
+                                usersJSON.getString("description").trim(),
+                                new User(usersJSON.getString("createdBy").trim()),
+                                new User(usersJSON.getString("assignedUser").trim()),
+                                TaskStatus.fromInteger(Integer.parseInt(usersJSON.getString("status").trim())),
+                                usersJSON.getString("createdDateTime").trim()
+                        );
+
+                        switch (task.getTaskStatus()) {
+                            case NEW:
+                                newTasks.add(task);
+                                break;
+                            case IN_PROGRESS:
+                                inProgressTasks.add(task);
+                                break;
+                            case CLOSED:
+                                closedTasks.add(task);
+                                break;
+                            default:
+                                break;
+                        }
+
+                    }
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
+
+                columnList.add(new StatusDragColumn(Integer.toString(NEW.getValue()), NEW.toString(), newTasks));
+                columnList.add(new StatusDragColumn(Integer.toString(IN_PROGRESS.getValue()), IN_PROGRESS.toString(), inProgressTasks));
+                columnList.add(new StatusDragColumn(Integer.toString(CLOSED.getValue()), CLOSED.toString(), closedTasks));
+
+                columnAdapter.notifyDataSetChanged();
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {}
+                })
+                ;
+
+        Volley.newRequestQueue(context).add(stringRequest);
     }
 
     public void loadUsers(final ListView lvUsers) {
@@ -368,7 +439,7 @@ public class DatabaseHelper {
         requestQueue.add(stringRequest);
     }
 
-    public void addTask(final String title, final String description, final String assignedUser, final Class activityToRedirect){
+    public void addTask(final String title, final String description, final String assignedUser, final TaskStatus taskStatus, final Class activityToRedirect){
         SharedPreferenceConfig sharedPreferenceConfig = new SharedPreferenceConfig(context.getApplicationContext());
         final String createdBy = sharedPreferenceConfig.getLoggedUser();
 
@@ -420,6 +491,7 @@ public class DatabaseHelper {
                 params.put("description", description);
                 params.put("createdBy", createdBy);
                 params.put("assignedUser", assignedUser);
+                params.put("taskStatus", Integer.toString(taskStatus.getValue()));
                 return params;
             }
         };
