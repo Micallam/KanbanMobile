@@ -18,6 +18,11 @@ import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 import java.util.ArrayList;
 
 public class AddTaskActivity extends AppCompatActivity {
+    public static final String REDIRECT_TO_KEY = "RedirectKey";
+    public static final String REDIRECT_TO_EDIT = "Edit";
+    public static final String REDIRECT_TO_BOARD = "Board";
+
+    Class activityToRedirect;
 
     EditText title, description;
     Spinner spinnerAssignedUser;
@@ -33,6 +38,16 @@ public class AddTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_task);
         sharedPreferenceConfig = new SharedPreferenceConfig(getApplicationContext());
         sharedPreferenceConfig.checkIfLogged(this);
+
+        Bundle bundle = getIntent().getExtras();
+        switch (bundle.getString(REDIRECT_TO_KEY)) {
+            case REDIRECT_TO_EDIT:
+                activityToRedirect = EditActivity.class;
+                break;
+            case REDIRECT_TO_BOARD:
+                activityToRedirect = BoardActivity.class;
+                break;
+        }
 
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
@@ -56,7 +71,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 String getAssignedUser = spinnerAssignedUser.getSelectedItem().toString();
 
                 if (!getTitle.isEmpty()) {
-                    databaseHelper.addTask(getTitle, getDescription, getAssignedUser, TaskStatus.NEW, EditActivity.class);
+                    databaseHelper.addTask(getTitle, getDescription, getAssignedUser, TaskStatus.NEW, activityToRedirect);
                 } else {
                     title.setError("Wprowadź tytuł!");
                 }

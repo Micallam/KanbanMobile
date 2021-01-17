@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.time.cat.dragboardview.helper.DragHelper.TYPE_CONTENT;
-import static com.time.cat.dragboardview.helper.DragHelper.TYPE_FOOTER;
 
 public abstract class HorizontalAdapter<VH extends HorizontalAdapter.ViewHolder>
         extends RecyclerView.Adapter<VH>
@@ -36,11 +35,6 @@ public abstract class HorizontalAdapter<VH extends HorizontalAdapter.ViewHolder>
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-//        if (needFooter() && viewType == TYPE_FOOTER) {
-//            View convertView = LayoutInflater.from(mContext)
-//                    .inflate(getFooterLayoutRes(), parent, false);
-//            return onCreateViewHolder(convertView, TYPE_FOOTER);
-//        }
         View convertView = LayoutInflater.from(mContext)
                 .inflate(getContentLayoutRes(), parent, false);
         return onCreateViewHolder(convertView, TYPE_CONTENT);
@@ -61,24 +55,22 @@ public abstract class HorizontalAdapter<VH extends HorizontalAdapter.ViewHolder>
 
                 onBindContentViewHolder(holder, dragColumn, position);
                 break;
-            case TYPE_FOOTER:
-                onBindFooterViewHolder(holder, position);
-                break;
             default:
                 break;
         }
     }
 
+    public Context getContext() {
+        return mContext;
+    }
+
     @Override
     public int getItemCount() {
-        if (!needFooter()) {return mData.size();}
-        return mData.size() + 1;
+        return mData.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (!needFooter()) {return TYPE_CONTENT;}
-        if (position == getItemCount() - 1) {return TYPE_FOOTER;}
         return TYPE_CONTENT;
     }
 
@@ -92,7 +84,6 @@ public abstract class HorizontalAdapter<VH extends HorizontalAdapter.ViewHolder>
     @Override
     public void onDrop(int page, int position, DragColumn tag) {
         mHideDragItem = false;
-//        notifyItemChanged(position);
         notifyDataSetChanged();
     }
 
@@ -177,25 +168,16 @@ public abstract class HorizontalAdapter<VH extends HorizontalAdapter.ViewHolder>
 
     public abstract int getContentLayoutRes();
 
-    public abstract int getFooterLayoutRes();
-
     public abstract VH onCreateViewHolder(View parent, int viewType);
 
     public abstract void onBindContentViewHolder(final VH holder, DragColumn dragColumn, int position);
 
-    public abstract void onBindFooterViewHolder(final VH holder, int position);
-
-    public abstract boolean needFooter();
-
     public abstract class ViewHolder extends RecyclerView.ViewHolder implements DragHorizontalViewHolder {
 
-        public ViewHolder(View convertView, int itemType) {
+        public ViewHolder(View convertView) {
             super(convertView);
-            if (itemType == TYPE_CONTENT) {
-                findViewForContent(convertView);
-            } else {
-                findViewForFooter(convertView);
-            }
+
+            findViewForContent(convertView);
         }
 
         @Override
@@ -203,8 +185,5 @@ public abstract class HorizontalAdapter<VH extends HorizontalAdapter.ViewHolder>
 
         @Override
         public abstract void findViewForContent(View convertView);
-
-        @Override
-        public abstract void findViewForFooter(View convertView);
     }
 }

@@ -9,5 +9,4 @@ public interface DragHorizontalViewHolder {
     RecyclerView getRecyclerView();
 
     void findViewForContent(View itemView);
-    void findViewForFooter(View itemView);
 }

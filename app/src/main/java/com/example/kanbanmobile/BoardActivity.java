@@ -5,13 +5,10 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kanbanmobile.adapters.ColumnAdapter;
-import com.example.kanbanmobile.data.StatusDragColumn;
-import com.example.kanbanmobile.data.TaskDragItem;
 import com.example.kanbanmobile.db.DatabaseHelper;
 import com.example.kanbanmobile.models.Task;
 import com.time.cat.dragboardview.DragBoardView;
 import com.time.cat.dragboardview.model.DragColumn;
-import com.time.cat.dragboardview.model.DragItem;
 import com.time.cat.dragboardview.utils.AttrAboutPhone;
 
 import java.util.ArrayList;

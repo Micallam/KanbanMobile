@@ -13,8 +13,7 @@ import com.example.kanbanmobile.db.DatabaseHelper;
 import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 
 public class AddUserActivity extends AppCompatActivity {
-
-    EditText login, password;
+        EditText login, password;
     Button btnRegister;
     ProgressBar progressBar;
     RadioButton typeAdmin, typeUser;

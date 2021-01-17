@@ -30,7 +30,6 @@ import java.util.TimerTask;
 
 public class DragHelper {
     public static final int TYPE_CONTENT = 1;
-    public static final int TYPE_FOOTER = 2;
 
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams mWindowParams;

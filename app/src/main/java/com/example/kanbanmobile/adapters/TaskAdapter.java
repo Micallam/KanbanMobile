@@ -15,9 +15,9 @@ import com.time.cat.dragboardview.adapter.VerticalAdapter;
 import com.time.cat.dragboardview.helper.DragHelper;
 import com.time.cat.dragboardview.model.DragItem;
 
-public class ItemAdapter extends VerticalAdapter<ItemAdapter.ViewHolder> {
+public class TaskAdapter extends VerticalAdapter<TaskAdapter.ViewHolder> {
 
-    public ItemAdapter(Context context, DragHelper dragHelper) {
+    public TaskAdapter(Context context, DragHelper dragHelper) {
         super(context, dragHelper);
     }
 

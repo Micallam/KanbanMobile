@@ -3,6 +3,7 @@ package com.example.kanbanmobile.db;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.text.UnicodeSetIterator;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -101,7 +102,12 @@ public class DatabaseHelper {
                                     sharedPreferenceConfig.loginStatus(true);
                                     sharedPreferenceConfig.loggedUser(login);
 
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(AddTaskActivity.REDIRECT_TO_KEY, AddTaskActivity.REDIRECT_TO_EDIT);
+
                                     Intent intent = new Intent(context, AddTaskActivity.class); //wywołać activity po zalogowaniu
+                                    intent.putExtras(bundle);
+
                                     context.startActivity(intent);
                                 }
 
