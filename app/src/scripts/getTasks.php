@@ -7,16 +7,17 @@
 		die();
 	}
 
-	$stmt = $conn->prepare("select status, title, description, assignedUser, createdBy, createdDateTime from Task;");
+	$stmt = $conn->prepare("select id, status, title, description, assignedUser, createdBy, createdDateTime from Task;");
 
 	$stmt->execute();
 
-	$stmt->bind_result($status, $title, $description, $assignedUser, $createdBy, $createdDateTime);
+	$stmt->bind_result($id, $status, $title, $description, $assignedUser, $createdBy, $createdDateTime);
 
 	$tasks = array();
 
 	while($stmt->fetch()){
 		$temp = array();
+		$temp['id'] = $id;
 		$temp['status'] = $status;
 		$temp['title'] = $title;
 		$temp['description'] = $description;

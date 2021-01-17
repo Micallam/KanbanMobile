@@ -7,6 +7,23 @@ import com.time.cat.dragboardview.model.DragItem;
 import java.time.LocalDateTime;
 
 public class Task implements DragItem {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
+    }
+
+    private int id;
     private String title;
     private String description;
     private User createdBy;
@@ -14,7 +31,8 @@ public class Task implements DragItem {
     private TaskStatus taskStatus;
     private LocalDateTime createdDateTime;
 
-    public Task(String title, String description, User createdBy, User assignedUser, TaskStatus taskStatus, String createdDateTime) {
+    public Task(int id, String title, String description, User createdBy, User assignedUser, TaskStatus taskStatus, String createdDateTime) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.createdBy = createdBy;

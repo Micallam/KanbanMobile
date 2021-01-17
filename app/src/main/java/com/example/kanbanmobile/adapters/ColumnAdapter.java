@@ -18,10 +18,12 @@ import com.example.kanbanmobile.AddTaskActivity;
 import com.example.kanbanmobile.R;
 import com.example.kanbanmobile.data.StatusDragColumn;
 import com.example.kanbanmobile.enums.TaskStatus;
+import com.example.kanbanmobile.models.Task;
 import com.time.cat.dragboardview.adapter.HorizontalAdapter;
 import com.time.cat.dragboardview.model.DragColumn;
 import com.time.cat.dragboardview.model.DragItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ColumnAdapter extends HorizontalAdapter<ColumnAdapter.ViewHolder> {
@@ -120,13 +122,6 @@ public class ColumnAdapter extends HorizontalAdapter<ColumnAdapter.ViewHolder> {
             rv_item = convertView.findViewById(R.id.rv);
             add_task = convertView.findViewById(R.id.add);
         }
-    }
-
-    @Override
-    public void onDrag(int position) {
-        super.onDrag(position);
-
-        // TODO Zaimplementować edycję statusu
     }
 }
 

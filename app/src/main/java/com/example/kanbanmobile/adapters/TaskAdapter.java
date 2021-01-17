@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kanbanmobile.R;
+import com.example.kanbanmobile.db.DatabaseHelper;
+import com.example.kanbanmobile.enums.TaskStatus;
 import com.example.kanbanmobile.models.Task;
 import com.time.cat.dragboardview.adapter.VerticalAdapter;
 import com.time.cat.dragboardview.helper.DragHelper;
@@ -45,6 +47,20 @@ public class TaskAdapter extends VerticalAdapter<TaskAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             item_title = itemView.findViewById(R.id.item_title);
+        }
+    }
+
+    @Override
+    public void onDrop(int page, int position, DragItem tag) {
+        super.onDrop(page, position, tag);
+
+        Task task = (Task) tag;
+
+        if (task.getTaskStatus() != TaskStatus.fromInteger(page)) {
+            task.setTaskStatus(TaskStatus.fromInteger(page));
+
+            DatabaseHelper databaseHelper = new DatabaseHelper(mContext, null);
+            databaseHelper.updateTaskStatus(task);
         }
     }
 }

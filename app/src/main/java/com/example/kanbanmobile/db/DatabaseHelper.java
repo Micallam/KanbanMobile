@@ -67,6 +67,7 @@ public class DatabaseHelper {
     final String URL_GET_USERS = "http://gajda-adrian.ehost.pl/scripts/getUsers.php";
     final String URL_GET_TASKS = "http://gajda-adrian.ehost.pl/scripts/getTasks.php";
     final String URL_ADD_TASK = "http://gajda-adrian.ehost.pl/scripts/addTask.php";
+    final String URL_UPDATE_TASK_STATUS = "http://gajda-adrian.ehost.pl/scripts/updateTaskStatus.php";
     final String URL_ADD_EVENT = "http://gajda-adrian.ehost.pl/scripts/addEvent.php";
     final String URL_GET_EVENTS = "http://gajda-adrian.ehost.pl/scripts/getEvents.php";
     final String URL_DELETE_EVENT = "http://gajda-adrian.ehost.pl/scripts/deleteEvent.php";
@@ -218,6 +219,7 @@ public class DatabaseHelper {
                         JSONObject usersJSON = array.getJSONObject(i);
 
                         Task task = new Task(
+                                usersJSON.getInt("id"),
                                 usersJSON.getString("title").trim(),
                                 usersJSON.getString("description").trim(),
                                 new User(usersJSON.getString("createdBy").trim()),
@@ -259,6 +261,59 @@ public class DatabaseHelper {
                 ;
 
         Volley.newRequestQueue(context).add(stringRequest);
+    }
+
+    public void updateTaskStatus(final Task task) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_UPDATE_TASK_STATUS,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try{
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+
+                            if (success.equals("1")) {
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
+                            } else {
+                                if (progressBar != null)
+                                    progressBar.setVisibility(View.INVISIBLE);
+
+                                Toast.makeText(context, "Błąd edytowania statusu", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, "Błąd edytowania statusu! " + e.toString(), Toast.LENGTH_SHORT).show();
+
+                            if (progressBar != null)
+                                progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Błąd edytowania statusu! " + error.toString(), Toast.LENGTH_SHORT).show();
+
+                        if (progressBar != null)
+                            progressBar.setVisibility(View.INVISIBLE);
+                    }
+                })
+
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", Integer.toString(task.getId()));
+                params.put("status", Integer.toString(task.getTaskStatus().getValue()));
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 
     public void loadUsers(final ListView lvUsers) {
@@ -505,6 +560,7 @@ public class DatabaseHelper {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
+
 
     public void getUsersToSpinner(final ArrayList<String> users, final Spinner spinnerAssignedUser) {
         final ArrayList<User> userArrayList = new ArrayList<User>();

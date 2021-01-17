@@ -45,30 +45,6 @@ public class BoardActivity extends AppCompatActivity {
 
     private void getDataAndRefreshView() {
         databaseHelper.loadTask(mAdapter, mColumnList);
-
-//        for (int i = 0; i < 3; i++) {
-//            List<DragItem> itemList = new ArrayList<>();
-//            for (int j = 0; j < 5; j++) {
-//                itemList.add(new TaskDragItem("entry " + i + " item id " + j, "item name " + j, "info " + j));
-//            }
-//
-//            switch (i)
-//            {
-//                case 0:
-//                    mColumnList.add(new StatusDragColumn("Nowe", "Nowe", itemList));
-//                    break;
-//                case 1:
-//                    mColumnList.add(new StatusDragColumn("W trakcie", "W trakcie", itemList));
-//                    break;
-//                case 2:
-//                    mColumnList.add(new StatusDragColumn("Skończone", "Skończone", itemList));
-//                    break;
-//                default:
-//                    mColumnList.add(new StatusDragColumn("entry id " + i, "name " + i, itemList));
-//
-//            }
-//        }
-//        mAdapter.notifyDataSetChanged();
     }
 
 }
