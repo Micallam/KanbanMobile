@@ -21,8 +21,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kanbanmobile.AddTaskActivity;
+import com.example.kanbanmobile.AdminActivity;
 import com.example.kanbanmobile.EditActivity;
 import com.example.kanbanmobile.LoginActivity;
+import com.example.kanbanmobile.TaskDetailsActivity;
+import com.example.kanbanmobile.UserActivity;
 import com.example.kanbanmobile.adapters.ColumnAdapter;
 import com.example.kanbanmobile.adapters.EventsAdapter;
 import com.example.kanbanmobile.R;
@@ -71,6 +74,7 @@ public class DatabaseHelper {
     final String URL_ADD_EVENT = "http://gajda-adrian.ehost.pl/scripts/addEvent.php";
     final String URL_GET_EVENTS = "http://gajda-adrian.ehost.pl/scripts/getEvents.php";
     final String URL_DELETE_EVENT = "http://gajda-adrian.ehost.pl/scripts/deleteEvent.php";
+    final String URL_GET_TASK_DETAILS = "http://gajda-adrian.ehost.pl/scripts/getTaskDetails.php";
     static String secretKey = "mfryy46ABm";
     static String salt = "Hx4wWgDU40";
     private Context context;
@@ -95,6 +99,7 @@ public class DatabaseHelper {
                             if (success.equals("1")) {
 
                                 for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject usersJSON = jsonArray.getJSONObject(i);
                                     Toast.makeText(context, "Zalogowano pomyślnie!", Toast.LENGTH_SHORT).show();
 
                                     if (progressBar != null)
@@ -103,13 +108,20 @@ public class DatabaseHelper {
                                     sharedPreferenceConfig.loginStatus(true);
                                     sharedPreferenceConfig.loggedUser(login);
 
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(AddTaskActivity.REDIRECT_TO_KEY, AddTaskActivity.REDIRECT_TO_EDIT);
+                                    int type = usersJSON.getInt("type");
 
-                                    Intent intent = new Intent(context, AddTaskActivity.class); //wywołać activity po zalogowaniu
-                                    intent.putExtras(bundle);
+                                    Intent intent;
 
-                                    context.startActivity(intent);
+                                    if (type == 1) {
+                                        intent = new Intent(context, AdminActivity.class); //wywołanie activity dla admina
+                                        context.startActivity(intent);
+                                    } else if (type == 0) {
+                                        intent = new Intent(context, UserActivity.class); //wywołanie activity dla zwykłego użytkownika
+                                        context.startActivity(intent);
+                                    } else {
+                                        Toast.makeText(context, "Wystąpił nieoczekiwany błąd!", Toast.LENGTH_SHORT).show();
+                                    }
+
                                 }
 
                             } else {
@@ -749,5 +761,52 @@ public class DatabaseHelper {
                 ;
 
         Volley.newRequestQueue(context).add(stringRequest);
+    }
+
+    public void getTaskDetails(final String taskId) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_GET_TASK_DETAILS,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject usersJSON = jsonArray.getJSONObject(i);
+
+                                    SharedPreferenceConfig sharedPreferenceConfig = new SharedPreferenceConfig(context);
+
+                                    sharedPreferenceConfig.setSelectedTaskDescription(usersJSON.getString("description"));
+
+                                    context.startActivity(new Intent(context, TaskDetailsActivity.class));
+                                }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+
+                            if (progressBar != null)
+                                progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(context, "Błąd! " +e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Błąd! " +error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", taskId);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 }

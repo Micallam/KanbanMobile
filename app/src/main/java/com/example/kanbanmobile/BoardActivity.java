@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.kanbanmobile.adapters.ColumnAdapter;
 import com.example.kanbanmobile.db.DatabaseHelper;
 import com.example.kanbanmobile.models.Task;
+import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 import com.time.cat.dragboardview.DragBoardView;
 import com.time.cat.dragboardview.model.DragColumn;
 import com.time.cat.dragboardview.utils.AttrAboutPhone;
@@ -27,6 +28,9 @@ public class BoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
+
+        SharedPreferenceConfig sharedPreferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        sharedPreferenceConfig.checkIfLogged(this);
 
         dragBoardView = findViewById(R.id.drag_board);
         mAdapter = new ColumnAdapter(this);

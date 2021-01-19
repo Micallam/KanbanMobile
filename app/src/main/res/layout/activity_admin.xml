@@ -11,7 +11,7 @@
         android:textSize="30dp"
         android:textAlignment="center"
         android:layout_centerHorizontal="true"
-        android:text="Kanban Mobile"
+        android:text="Panel Administratora"
         android:textColor="#000"/>
 
     <TextView
@@ -27,23 +27,33 @@
         android:textColor="#000"/>
 
     <Button
-        android:id="@+id/btn_login_start"
+        android:id="@+id/btn_board"
         android:layout_width="300dp"
         android:layout_height="65dp"
         android:layout_below="@id/application_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="ZALOGUJ"
+        android:text="TABLICA"
         android:textSize="17sp" />
 
     <Button
-        android:id="@+id/btn_register_start"
+        android:id="@+id/btn_calendar"
         android:layout_width="300dp"
         android:layout_height="65dp"
-        android:layout_below="@id/btn_login_start"
+        android:layout_below="@id/btn_board"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="ZAREJESTRUJ SIĘ"
+        android:text="KALENDARZ"
+        android:textSize="17sp" />
+
+    <Button
+        android:id="@+id/btn_admin_panel_start"
+        android:layout_width="300dp"
+        android:layout_height="65dp"
+        android:layout_below="@id/btn_calendar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="ZARZĄDZANIE"
         android:textSize="17sp" />
 
 </RelativeLayout>

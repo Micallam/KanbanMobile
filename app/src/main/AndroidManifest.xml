@@ -14,8 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddTaskActivity"></activity>
-        <activity android:name=".BoardActivity"></activity>
+        <activity android:name=".TaskDetailsActivity"></activity>
+        <activity android:name=".AdminActivity" />
+        <activity android:name=".UserActivity" />
+        <activity android:name=".AddTaskActivity" />
+        <activity android:name=".BoardActivity" />
         <activity android:name=".EditActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".AddUserActivity" />

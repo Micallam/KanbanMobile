@@ -7,13 +7,7 @@ import com.time.cat.dragboardview.model.DragItem;
 import java.time.LocalDateTime;
 
 public class Task implements DragItem {
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
@@ -39,6 +33,14 @@ public class Task implements DragItem {
         this.assignedUser = assignedUser;
         this.taskStatus = taskStatus;
         this.createdDateTime = AndroidUtil.stringToEventDateTime(createdDateTime);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {

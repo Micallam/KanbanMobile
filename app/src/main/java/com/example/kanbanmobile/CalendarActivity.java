@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kanbanmobile.db.DatabaseHelper;
 import com.example.kanbanmobile.models.Event;
+import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 import com.example.kanbanmobile.utils.AndroidUtil;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,9 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clendar);
+        SharedPreferenceConfig sharedPreferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        sharedPreferenceConfig.checkIfLogged(this);
+
 
         final DatabaseHelper databaseHelper = new DatabaseHelper(CalendarActivity.this, null);
 

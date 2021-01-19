@@ -1,48 +1,46 @@
 package com.example.kanbanmobile;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.kanbanmobile.shared.SharedPreferenceConfig;
 
-public class MainActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity {
 
-    Button btnLogin;
-    Button btnRegister;
+    Button btnCalendar;
+    Button btnBoard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_user);
 
         SharedPreferenceConfig sharedPreferenceConfig = new SharedPreferenceConfig(getApplicationContext());
         sharedPreferenceConfig.checkIfLogged(this);
 
-        btnLogin = findViewById(R.id.btn_login_start);
-        btnRegister = findViewById(R.id.btn_register_start);
+        btnCalendar = findViewById(R.id.btn_calendar);
+        btnBoard = findViewById(R.id.btn_board);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this,
-                        LoginActivity.class);
+                Intent i = new Intent(UserActivity.this,
+                        CalendarActivity.class);
                 startActivity(i);
             }
         });
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        btnBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this,
-                        RegisterActivity.class);
+                Intent i = new Intent(UserActivity.this,
+                        BoardActivity.class);
                 startActivity(i);
             }
         });
     }
 }
-

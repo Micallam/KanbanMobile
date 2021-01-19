@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             $index['id'] = $row['id'];
             $index['login'] = $row['login'];
+			$index['type'] = $row['type'];
 
             array_push($result['login'], $index);
 

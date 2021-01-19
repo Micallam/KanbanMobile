@@ -9,4 +9,5 @@ public interface DragHorizontalAdapter {
     void onDragOut();
     void onDragIn(int position, DragColumn tag);
     void updateDragItemVisibility(int position);
+
 }
