@@ -35,6 +35,13 @@ public class Task implements DragItem {
         this.createdDateTime = AndroidUtil.stringToEventDateTime(createdDateTime);
     }
 
+    public Task(int id, String title, String description, User assignedUser) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.assignedUser = assignedUser;
+    }
+
     public int getId() {
         return id;
     }

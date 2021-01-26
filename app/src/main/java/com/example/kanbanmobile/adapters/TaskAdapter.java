@@ -24,8 +24,6 @@ import com.time.cat.dragboardview.model.DragItem;
 
 public class TaskAdapter extends VerticalAdapter<TaskAdapter.ViewHolder> {
 
-    private OnItemClickListener mListener;
-
     public TaskAdapter(Context context, DragHelper dragHelper) {
         super(context, dragHelper);
     }
@@ -45,7 +43,7 @@ public class TaskAdapter extends VerticalAdapter<TaskAdapter.ViewHolder> {
                 return true;
             }
         });
-        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferenceConfig sharedPreferenceConfig = new SharedPreferenceConfig(context);
@@ -55,7 +53,8 @@ public class TaskAdapter extends VerticalAdapter<TaskAdapter.ViewHolder> {
                 DatabaseHelper databaseHelper = new DatabaseHelper(context,null);
                 databaseHelper.getTaskDetails(sharedPreferenceConfig.getSelectedTaskId());
             }
-        });*/
+        });
+
         holder.item_title.setText(((Task) item).getTitle());
         int itemIdInt = ((Task) item).getId();
         String itemIdString = String.valueOf(itemIdInt);
@@ -71,14 +70,6 @@ public class TaskAdapter extends VerticalAdapter<TaskAdapter.ViewHolder> {
             item_title = itemView.findViewById(R.id.item_title);
             item_id = itemView.findViewById(R.id.item_id);
         }
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        mListener = listener;
     }
 
     @Override

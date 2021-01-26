@@ -10,29 +10,57 @@
         android:id="@+id/item_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_marginHorizontal="30dp"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        android:text="testowy tekst"/>
+
+    <TextView
+        android:id="@+id/title_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tytuł:"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:layout_below="@id/item_id" />
 
     <EditText
         android:id="@+id/item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/item_id"
-        android:textSize="20dp"
-        android:text="TextView" />
+        android:layout_marginHorizontal="30dp"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/title_label"/>
+
+
+    <TextView
+        android:id="@+id/description_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Opis:"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:layout_below="@id/item_title" />
 
     <EditText
         android:id="@+id/item_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/item_title"
-        android:textSize="20dp"
-        android:text="TextView" />
+        android:layout_marginHorizontal="30dp"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/description_label"/>
 
     <TextView
         android:id="@+id/user_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Użytkownik odpowiedzialny:"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="30dp"
         android:textSize="20sp"
         android:layout_below="@id/item_description" />
 
@@ -41,21 +69,25 @@
         android:layout_below="@+id/user_label"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="30dp"
         android:layout_width="300dp"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/button_delete"
+        android:id="@+id/button_task_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_below="@+id/user_spinner"
         android:text="Usuń" />
 
     <Button
-        android:id="@+id/button_save"
+        android:id="@+id/button_task_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_spinner"
-        android:layout_toRightOf="@+id/button_delete"
+        android:layout_marginTop="30dp"
+        android:layout_toRightOf="@+id/button_task_delete"
         android:text="Zapisz zmiany" />
 </RelativeLayout>
