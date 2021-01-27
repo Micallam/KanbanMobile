@@ -46,24 +46,4 @@
         android:text="ZAREJESTRUJ SIĘ"
         android:textSize="17sp" />
 
-    <Button
-        android:id="@+id/btn_admin_panel_start"
-        android:layout_width="300dp"
-        android:layout_height="65dp"
-        android:layout_below="@id/btn_register_start"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="PANEL"
-        android:textSize="17sp" />
-
-    <Button
-        android:id="@+id/btn_calendar_start"
-        android:layout_width="300dp"
-        android:layout_height="65dp"
-        android:layout_below="@id/btn_admin_panel_start"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="KALENDARZ"
-        android:textSize="17sp" />
-
 </RelativeLayout>

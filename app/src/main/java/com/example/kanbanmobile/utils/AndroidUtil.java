@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 public class AndroidUtil {
@@ -39,5 +40,11 @@ public class AndroidUtil {
     public static LocalDateTime longToDateTime(long timestamp) {
         return  LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),
                 TimeZone.getDefault().toZoneId());
+    }
+
+    public static LocalDateTime stringToEventDateTime(String eventDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        return LocalDateTime.parse(eventDateTime, formatter);
     }
 }

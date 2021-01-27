@@ -36,6 +36,8 @@ public class AdminPanelActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(AdminPanelActivity.this,
                         AddUserActivity.class);
+
+
                 startActivity(i);
             }
         });

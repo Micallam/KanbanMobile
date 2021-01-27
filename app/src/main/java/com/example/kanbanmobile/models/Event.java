@@ -1,5 +1,7 @@
 package com.example.kanbanmobile.models;
 
+import com.example.kanbanmobile.utils.AndroidUtil;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -17,7 +19,7 @@ public class Event {
     public Event(String name, String description, String eventDateTime) {
         this.name = name;
         this.description = description;
-        this.eventDateTime = this.stringToEventDateTime(eventDateTime);
+        this.eventDateTime = AndroidUtil.stringToEventDateTime(eventDateTime);
     }
 
     public String getName() {
@@ -42,12 +44,6 @@ public class Event {
 
     public void setEventDateTime(LocalDateTime eventDateTime) {
         this.eventDateTime = eventDateTime;
-    }
-
-    public LocalDateTime stringToEventDateTime(String eventDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        return LocalDateTime.parse(eventDateTime, formatter);
     }
 
     public String getEventDateTimeString() {

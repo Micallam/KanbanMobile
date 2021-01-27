@@ -50,4 +50,42 @@ public class SharedPreferenceConfig {
             ((Activity) ctx).finish();
         } else {}
     }
+
+    public void setSelectedTaskId(String selectedTaskId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("selectedTaskId", selectedTaskId);
+        editor.commit();
+    }
+
+    public String getSelectedTaskId() {
+        String selectedTaskId = "";
+        selectedTaskId = sharedPreferences.getString("selectedTaskId", "");
+        return selectedTaskId;
+    }
+
+    public void setSelectedTaskTitle(String selectedTaskTitle) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("selectedTaskTitle", selectedTaskTitle);
+        editor.commit();
+    }
+
+    public String getSelectedTaskTitle() {
+        String selectedTaskTitle = "";
+        selectedTaskTitle = sharedPreferences.getString("selectedTaskTitle", "");
+        return selectedTaskTitle;
+    }
+
+    public void setSelectedTaskDescription(String selectedTaskDescription) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("selectedTaskDescription", selectedTaskDescription);
+        editor.commit();
+    }
+
+    public String getSelectedTaskDescription() {
+        String selectedTaskDescription = "";
+        selectedTaskDescription = sharedPreferences.getString("selectedTaskDescription", "");
+        return selectedTaskDescription;
+    }
+
+
 }

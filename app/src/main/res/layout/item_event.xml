@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/event_item_description"
         android:layout_width="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.35"
         android:layout_height="wrap_content"
         android:minHeight="50sp"
         android:textSize="17sp"
@@ -38,17 +38,6 @@
         android:paddingVertical="5sp"
         android:gravity="center_vertical"
         android:text="Czas" />
-
-    <Button
-        android:id="@+id/btnEditEvent"
-        android:layout_width="0dp"
-        android:layout_weight="0.15"
-        android:layout_height="wrap_content"
-        android:minHeight="50sp"
-        android:layout_marginHorizontal="1sp"
-        android:background="@android:color/holo_blue_light"
-        android:text="Edytuj"
-        android:textSize="13sp" />
 
     <Button
         android:id="@+id/btnDeleteEvent"

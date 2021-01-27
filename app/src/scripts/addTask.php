@@ -2,6 +2,7 @@
 
 if ($_SERVER['REQUEST_METHOD'] =='POST'){
 
+	$taskStatus = $_POST['taskStatus'];
 	$title = $_POST['title'];
     $description = $_POST['description'];
 	$createdBy = $_POST['createdBy'];
@@ -9,8 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] =='POST'){
 
     require_once 'connect.php';
 
-    $sql = "INSERT INTO Task (status, title, description, assignedUser, createdBy, createdDateTime) VALUES (0, '$title', '$description', (SELECT id FROM User WHERE login='$assignedUser'),
-        (SELECT id FROM User WHERE login='$createdBy'), NOW())";
+    $sql = "INSERT INTO Task (status, title, description, assignedUser, createdBy, createdDateTime)
+        VALUES ('$taskStatus', '$title', '$description',
+        (SELECT id FROM User WHERE login='$assignedUser'),
+        (SELECT id FROM User WHERE login='$createdBy'),
+        NOW())";
 
     if ( mysqli_query($conn, $sql) ) {
 
